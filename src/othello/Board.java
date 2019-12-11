@@ -213,6 +213,77 @@ public class Board {
 			}
 		}
 	}
+	
+	public void placeOneDirection (int locationX, int locationY, ArrayList<String> oneDirection, int xIncrement, int yIncrement)
+	{
+		for (int i = 0 ; i < oneDirection.size() ; i++)
+		{
+			int tempLocationX = locationX + (xIncrement * i);
+			int tempLocationY = locationY + (yIncrement * i);
+			if (oneDirection.get(i) != oneDirection.get(0) && oneDirection.get(i) == "w")
+			{
+				board.get(tempLocationX).set(tempLocationY, "b");
+			}
+			else if (oneDirection.get(i) != oneDirection.get(0) && oneDirection.get(i) == "b")
+			{
+				board.get(tempLocationX).set(tempLocationY, "w");
+			}
+		}
+	}
+	
+	public boolean placeAllDirections(int alocationX, int alocationY, String referenceButton)
+	{
+		ArrayList<String> oneDirection;
+//		go right
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,0,1);
+		if (isValidDirection(oneDirection))
+		{
+			placeOneDirection(alocationX,alocationY,oneDirection,0,1);
+		}
+//		go up and right
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,1);
+		if (isValidDirection(oneDirection))
+		{
+			placeOneDirection(alocationX,alocationY,oneDirection,-1,1);
+		}
+//		go up
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,0);
+		if (isValidDirection(oneDirection))
+		{
+			placeOneDirection(alocationX,alocationY,oneDirection,-1,0);
+		}
+//		go up and left
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,-1);
+		if (isValidDirection(oneDirection))
+		{
+			placeOneDirection(alocationX,alocationY,oneDirection,-1,-1);
+		}
+//		go left
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,0,-1);
+		if (isValidDirection(oneDirection))
+		{
+			placeOneDirection(alocationX,alocationY,oneDirection,0,-1);
+		}
+//		go down and left
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,-1);
+		if (isValidDirection(oneDirection))
+		{
+			placeOneDirection(alocationX,alocationY,oneDirection,1,-1);
+		}
+//		go down
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,0);
+		if (isValidDirection(oneDirection))
+		{
+			placeOneDirection(alocationX,alocationY,oneDirection,1,0);
+		}
+//		go down and right
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,1);
+		if (isValidDirection(oneDirection))
+		{
+			placeOneDirection(alocationX,alocationY,oneDirection,1,1);
+		}
+		return false;
+	}
 
 
 }
