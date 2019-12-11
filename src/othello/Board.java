@@ -1,8 +1,11 @@
-package november30;
+package othello;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Text file encoding must be changed into UTF-8
 public class Board {
 	
 //	Standard board is 8x8. Using List of lists
@@ -51,7 +54,7 @@ public class Board {
 				String square;
 				if (board.get(i).get(j).equals("w"))
 				{
-					square = "○";
+					square = "○"; // ☒
 				}
 				else if (board.get(i).get(j).equals("b"))
 				{
