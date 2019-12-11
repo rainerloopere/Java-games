@@ -14,15 +14,15 @@ public class Board {
 	public Board ()
 	{
 		this.board = new ArrayList<ArrayList<String>>();
-		initializeBoard(8);
+		initializeBoard();
 	}
 	
-	public void initializeBoard (int size)
+	public void initializeBoard ()
 	{
-		for (int i = 0; i < size; i++) 
+		for (int i = 0; i < 8; i++) 
 		{
 			ArrayList<String> temprow = new ArrayList<String> ();
-			for (int j = 0; j < size; j++) 
+			for (int j = 0; j < 8; j++) 
 			{
 				if ((i==3 && j == 3) || (i==4 && j == 4))
 				{
@@ -54,7 +54,7 @@ public class Board {
 				String square;
 				if (board.get(i).get(j).equals("w"))
 				{
-					square = "○"; // ☒
+					square = "○"; // 
 				}
 				else if (board.get(i).get(j).equals("b"))
 				{
@@ -63,6 +63,10 @@ public class Board {
 				else if (board.get(i).get(j).equals(""))
 				{
 					square = "☐";
+				}
+				else if (board.get(i).get(j).equals("x"))
+				{
+					square = "☒";
 				}
 				else
 				{
@@ -86,34 +90,15 @@ public class Board {
 	{
 		board.get(locationX).set(locationY, newButton);
 	}
-	
-//	doesn't work
-//	public boolean isOppositeButton(int locationX, int locationY, String referenceButton)
-//	{
-//		String squareString = getButton(locationX,locationX);
-//
-//		if (!(squareString.equals(referenceButton)) && !(squareString.equals("")))
-//		{
-//			System.out.println(squareString + " is opposite to " + referenceButton);
-//			return true;
-//		}
-//		else
-//		{
-//			System.out.println(squareString + " is not opposite to " + referenceButton);
-//			return false;
-//		}
-//	}
 	public boolean isMatchingButton(int blocationX, int blocationY, String referenceButton)
 	{
 		String asquareString = getButton(blocationX,blocationY);
 		if (asquareString.equals(referenceButton))
 		{
-			System.out.println(asquareString + " does match " + referenceButton);
 			return true;
 		}
 		else 
 		{
-			System.out.println(asquareString + " does not match " + referenceButton);
 			return false;
 		}
 	}
@@ -121,7 +106,7 @@ public class Board {
 	public boolean isValidDirection (ArrayList<String> oneDirection)
 	{
 		boolean isValidMove = false;
-		if (oneDirection.contains("") || oneDirection.size()==2)
+		if (oneDirection.contains("") || oneDirection.contains("x") ||oneDirection.size()<=2)
 		{
 			isValidMove = false;
 		}
@@ -129,7 +114,6 @@ public class Board {
 		{
 			isValidMove = true;
 		}
-		System.out.println("isValidMove = " + isValidMove);
 		return isValidMove;
 	}
 	
@@ -139,35 +123,95 @@ public class Board {
 		int tempLocationX = locationX;
 		int tempLocationY = locationY;
 		oneDirection.add(referenceButton);
-		System.out.println("start button " + referenceButton + " " + locationX + locationY);
-		while (!(isMatchingButton(tempLocationX, tempLocationY, referenceButton)) && tempLocationX < 7 && tempLocationY < 7) 
+		while (!(isMatchingButton(tempLocationX, tempLocationY, referenceButton)) && tempLocationX < 7 && tempLocationY < 7 && tempLocationX > 0 && tempLocationY > 0) 
 		{
-			System.out.println("start round");
 			tempLocationX += xIncrement;
 			tempLocationY += yIncrement;
-//			setButton(tempLocationX,tempLocationY,"x");
-			System.out.println("next button " + getButton(tempLocationX, tempLocationY) + " " + tempLocationX + tempLocationY);
 			oneDirection.add(getButton(tempLocationX, tempLocationY));
 		}
 		return oneDirection;
 	}
 	
-	public void checkAllDirections(int alocationX, int alocationY, String referenceButton)
+	public boolean checkAllDirections(int alocationX, int alocationY, String referenceButton)
 	{
-//		setButton(locationX,locationY,"x");
-//		printBoard();
-//		String buttonString = getButton(locationX, locationY); not needed any more
+		ArrayList<String> oneDirection;
 //		go right
-		ArrayList<String> oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,0,1);
-		
-		
-		for (String square:oneDirection)
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,0,1);
+		if (isValidDirection(oneDirection))
+			{
+			return true;
+			}
+//		go up and right
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,1);
+		if (isValidDirection(oneDirection))
 		{
-			System.out.print(square + "-");
+		return true;
 		}
-		isValidDirection(oneDirection);
-		
-		
+//		go up
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,0);
+		if (isValidDirection(oneDirection))
+		{
+		return true;
+		}
+//		go up and left
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,-1);
+		if (isValidDirection(oneDirection))
+		{
+		return true;
+		}
+//		go left
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,0,-1);
+		if (isValidDirection(oneDirection))
+		{
+		return true;
+		}
+//		go down and left
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,-1);
+		if (isValidDirection(oneDirection))
+		{
+		return true;
+		}
+//		go down
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,0);
+		if (isValidDirection(oneDirection))
+		{
+		return true;
+		}
+//		go down and right
+		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,1);
+		if (isValidDirection(oneDirection))
+		{
+		return true;
+		}
+		return false;
+	}
+	
+	public void checkAllSquares(String referenceButton)
+	{
+		for (int i = 0; i < 8; i++) 
+		{
+			for (int j = 0; j < 8; j++) 
+			{
+				if (board.get(i).get(j) == "" && checkAllDirections(i, j, referenceButton))
+				{
+					board.get(i).set(j, "x");
+				}
+			}
+		}
+		printBoard();
+	}
+	public void clearMoves()
+	{
+		for (int i = 0; i < 8; i++) 
+		{
+			for (int j = 0; j < 8; j++) 
+			{
+				if (board.get(i).get(j) == "x")
+				{
+					board.get(i).set(j, "");
+				}
+			}
+		}
 	}
 
 
