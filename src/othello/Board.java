@@ -50,7 +50,7 @@ public class Board {
 	public void printBoard ()
 	{
 		System.out.println("0 1 2 3 4 5 6 7");
-		System.out.println("a b c d e f g h");
+		System.out.println("A B C D E F G H");
 		for (int i = 0; i < board.length; i++) 
 		{
 //			System.out.print((i+1) + "\u2001"); // space in there appears with different width every single time
@@ -103,28 +103,28 @@ public class Board {
 //		}
 	}
 	
-	public ArrayList<Square> getSquareList (int locationX, int locationY, String referenceButton, int xIncrement, int yIncrement)
+	public ArrayList<Square> getSquareList (int locationY, int locationX, String referenceButton, int xIncrement, int yIncrement)
 	{
 		ArrayList<Square> squareList = new ArrayList<Square> ();
-		int tempLocationX = locationX;
-		int tempLocationY = locationY;
-		squareList.add(new Square(locationX,locationY,referenceButton));
+		int templocationY = locationY;
+		int templocationX = locationX;
+		squareList.add(new Square(locationY,locationX,referenceButton));
 		if (xIncrement == 0 && yIncrement == 0)
 		{
 			return squareList;
 		}
-		while (!(board[tempLocationX][tempLocationY].equals(referenceButton)) && tempLocationX < 7 && tempLocationY < 7 && tempLocationX > 0 && tempLocationY > 0) 
+		while (!(board[templocationY][templocationX].equals(referenceButton)) && templocationY < 7 && templocationX < 7 && templocationY > 0 && templocationX > 0) 
 		{
-			tempLocationX += xIncrement;
-			tempLocationY += yIncrement;
-			squareList.add(new Square(tempLocationX,tempLocationY,board[tempLocationX][tempLocationY]));
+			templocationY += xIncrement;
+			templocationX += yIncrement;
+			squareList.add(new Square(templocationY,templocationX,board[templocationY][templocationX]));
 		}
 		return squareList;
 	}
 	
-	public boolean isValidMove(int locationX, int locationY, String referenceButton)
+	public boolean isValidMove(int locationY, int locationX, String referenceButton)
 	{
-		if (board[locationX][locationY].equals(""))
+		if (!board[locationY][locationX].equals(""))
 		{
 			return false;
 		}
@@ -133,7 +133,7 @@ public class Board {
 		{
 			for (int j = -1 ; j <= 1;j++)
 			{
-				squareList = getSquareList(locationX,locationY,referenceButton,i,j);
+				squareList = getSquareList(locationY,locationX,referenceButton,i,j);
 				if (isValidDirection(squareList))
 				{
 					return true;
@@ -141,56 +141,6 @@ public class Board {
 			}
 		}
 		return false;
-		
-////		go right
-//		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,0,1);
-//		if (isValidDirection(oneDirection))
-//			{
-//			return true;
-//			}
-////		go up and right
-//		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,1);
-//		if (isValidDirection(oneDirection))
-//		{
-//		return true;
-//		}
-////		go up
-//		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,0);
-//		if (isValidDirection(oneDirection))
-//		{
-//		return true;
-//		}
-////		go up and left
-//		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,-1,-1);
-//		if (isValidDirection(oneDirection))
-//		{
-//		return true;
-//		}
-////		go left
-//		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,0,-1);
-//		if (isValidDirection(oneDirection))
-//		{
-//		return true;
-//		}
-////		go down and left
-//		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,-1);
-//		if (isValidDirection(oneDirection))
-//		{
-//		return true;
-//		}
-////		go down
-//		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,0);
-//		if (isValidDirection(oneDirection))
-//		{
-//		return true;
-//		}
-////		go down and right
-//		oneDirection = checkOneDirection (alocationX,alocationY,referenceButton,1,1);
-//		if (isValidDirection(oneDirection))
-//		{
-//		return true;
-//		}
-//		return false;
 	}
 	
 	public ArrayList<Square> getAvailableMoves(String referenceButton)
@@ -230,7 +180,7 @@ public class Board {
 	{
 		for (Square square : availableMoves)
 		{
-			board[square.getLocationX()][square.getLocationY()] = square.getButton();
+			board[square.getlocationY()][square.getlocationX()] = square.getButton();
 		}
 	}
 
