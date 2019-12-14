@@ -106,41 +106,58 @@ public class Board {
 	public ArrayList<Square> getSquareList (int locationY, int locationX, String referenceButton, int xIncrement, int yIncrement)
 	{
 		ArrayList<Square> squareList = new ArrayList<Square> ();
-		int templocationY = locationY;
-		int templocationX = locationX;
+		int tempLocationY = locationY;
+		int tempLocationX = locationX;
 		squareList.add(new Square(locationY,locationX,referenceButton));
 		if (xIncrement == 0 && yIncrement == 0)
 		{
 			return squareList;
 		}
-		while (!(board[templocationY][templocationX].equals(referenceButton)) && templocationY < 7 && templocationX < 7 && templocationY > 0 && templocationX > 0) 
+		while (tempLocationY <= 7 && tempLocationX <= 7 && tempLocationY >= 0 && tempLocationX >= 0) 
 		{
-			templocationY += xIncrement;
-			templocationX += yIncrement;
-			squareList.add(new Square(templocationY,templocationX,board[templocationY][templocationX]));
+			if (board[tempLocationY][tempLocationX].equals(referenceButton))
+			{
+				break;
+			}
+			else if (tempLocationY != locationY && tempLocationX != locationX)
+			{
+				squareList.add(new Square(tempLocationY,tempLocationX,board[tempLocationY][tempLocationX]));
+			}
+			tempLocationX += xIncrement;
+			tempLocationY += yIncrement;
 		}
 		return squareList;
 	}
 	
-	public boolean isValidMove(int locationY, int locationX, String referenceButton)
+//	possible to add this as an variable to Square and refactor the placing part
+	public ArrayList<Square> getCaptureSquares(int locationY, int locationX, String referenceButton)
 	{
+		ArrayList<Square> captureSquares = new ArrayList<Square>();
 		if (!board[locationY][locationX].equals(""))
 		{
-			return false;
+			return captureSquares;
 		}
 		ArrayList<Square> squareList;
 		for (int i = -1 ; i <= 1;i++)
 		{
 			for (int j = -1 ; j <= 1;j++)
 			{
+				System.out.println("checking direction " + i + j);
 				squareList = getSquareList(locationY,locationX,referenceButton,i,j);
+				System.out.println(squareList);
 				if (isValidDirection(squareList))
 				{
-					return true;
+						for (Square square : squareList)
+						{
+							if (!square.getButton().equals(referenceButton))
+							{
+								captureSquares.add(square);
+							}
+						}
 				}
 			}
 		}
-		return false;
+		return captureSquares;
 	}
 	
 	public ArrayList<Square> getAvailableMoves(String referenceButton)
@@ -150,7 +167,8 @@ public class Board {
 		{
 			for (int j = 0; j < board[i].length; j++) 
 			{
-				if (isValidMove(i,j,referenceButton))
+				System.out.println("checking " + i + j);
+				if (getCaptureSquares(i,j,referenceButton).size() > 0)
 				{
 					board[i][j] = "x";
 					availableMoves.add(new Square(i,j,referenceButton));
@@ -176,11 +194,13 @@ public class Board {
 		}
 	}
 	
-	public void placeMove (ArrayList<Square> availableMoves)
+	public void placeMove (Square move)
 	{
-		for (Square square : availableMoves)
+		ArrayList<Square> captureSquares = getCaptureSquares(move.getLocationY(), move.getLocationX(), move.getButton());
+		board[move.getLocationY()][move.getLocationX()] = move.getButton();
+		for (Square square : captureSquares)
 		{
-			board[square.getlocationY()][square.getlocationX()] = square.getButton();
+			board[square.getLocationY()][square.getLocationX()] = move.getButton();
 		}
 	}
 
