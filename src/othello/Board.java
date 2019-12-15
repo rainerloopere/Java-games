@@ -12,13 +12,17 @@ import java.util.List;
 public class Board {
 	
 //	Standard board is 8x8. Using List of lists
-	private final String[][] board;
+	String[][] board;
 	
 	public Board ()
 	{
 		this.board = new String[8][8];
 		initializeBoard();
 	}
+//	public Board getBoard ()
+//	{
+//		return this.getBoard();
+//	}
 	
 	public void initializeBoard ()
 	{
