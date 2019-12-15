@@ -1,6 +1,6 @@
 package othello;
 
-//not used
+
 public class Square {
 	
 	private final int locationX;
