@@ -100,14 +100,14 @@ public class Board {
 				return false;
 			}
 		}
-//		if (squareList.get(0).getButton() == squareList.get(squareList.size()-1).getButton()) // first if filters everything out and no need for others
-//		{
+		if (squareList.get(0).getButton().equals(squareList.get(squareList.size()-1).getButton())) // making sure that the list starts and ends with same button
+		{
 			return true;
-//		}
-//		else
-//		{
-//			return false;
-//		}
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 //	does not properly handle sides of board
@@ -123,7 +123,6 @@ public class Board {
 		}
 		while (tempLocationY <= 7 && tempLocationX <= 7 && tempLocationY >= 0 && tempLocationX >= 0) 
 		{
-
 			if (!(tempLocationY == locationY && tempLocationX == locationX))
 			{
 				squareList.add(new Square(tempLocationX,tempLocationY,board[tempLocationY][tempLocationX]));
@@ -188,9 +187,9 @@ public class Board {
 	}
 	public void clearMoves()
 	{
-		for (int i = 0; i < 8; i++) 
+		for (int i = 0; i < board.length; i++) 
 		{
-			for (int j = 0; j < 8; j++) 
+			for (int j = 0; j < board[i].length; j++) 
 			{
 				if (board[i][j] == "x")
 				{
@@ -210,6 +209,21 @@ public class Board {
 		{
 			board[square.getLocationY()][square.getLocationX()] = move.getButton();
 		}
+	}
+	public int countButtons (String referenceButton)
+	{
+		int count = 0;
+		for (int i = 0; i < board.length; i++) 
+		{
+			for (int j = 0; j < board[i].length; j++) 
+			{
+				if (board[j][i].equals(referenceButton))
+				{
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 }
