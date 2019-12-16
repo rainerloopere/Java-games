@@ -12,7 +12,7 @@ import java.util.List;
 public class Board {
 	
 //	Standard board is 8x8. Using List of lists
-	String[][] board;
+	private String[][] board;
 	
 	public Board ()
 	{
@@ -205,10 +205,10 @@ public class Board {
 		System.out.println(move);
 		ArrayList<Square> captureSquares = getCaptureSquares(move.getLocationX(),move.getLocationY(), move.getButton());
 		System.out.println(captureSquares);
-		board[move.getLocationY()][move.getLocationX()] = move.getButton();
+		this.board[move.getLocationY()][move.getLocationX()] = move.getButton();
 		for (Square square : captureSquares)
 		{
-			board[square.getLocationY()][square.getLocationX()] = move.getButton();
+			this.board[square.getLocationY()][square.getLocationX()] = move.getButton();
 		}
 	}
 	public int countButtons (String referenceButton)
