@@ -137,6 +137,7 @@ public class Board {
 		return squareList;
 	}
 	
+//	list of opposite colour buttons that one particular move will capture
 //	possible to add this as an variable to Square and refactor the placing part
 	public ArrayList<Square> getCaptureSquares(int locationX, int locationY, String referenceButton)
 	{
