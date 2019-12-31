@@ -7,12 +7,11 @@ import java.util.List;
 
 //Text file encoding must be changed into UTF-8
 
-
-
 public class Board {
 	
 //	Standard board is 8x8. Using List of lists
 	private String[][] board;
+	
 	
 	public Board ()
 	{
