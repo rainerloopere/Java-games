@@ -7,7 +7,8 @@ import othello.Square2.buttonValues;
 public class Board2 {
 
 //	Standard board is 8x8.
-	private Square2[][] board;
+//	think about making it private? has impact on subclasses
+	 Square2[][] board;
 	
 	public Board2 ()
 	{
