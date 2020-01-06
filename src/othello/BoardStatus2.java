@@ -6,22 +6,34 @@ import othello.Square2.buttonValues;
 
 public class BoardStatus2 extends Board2{
 	private buttonValues turn; 
-	private ArrayList<Square2> availableMoves;
+	private ArrayList<Move2> availableMoves;
 	
-	public BoardStatus2 (buttonValues turn)
+	public BoardStatus2 ()
 	{
-		this.turn = turn;
+		this.turn = buttonValues.BLACK; //Black starts the game
+		this.availableMoves = findAvailableMoves();
 	}
 	
-	public ArrayList<Square2> getAvailableMoves()
+	public buttonValues getTurn() 
 	{
-		ArrayList<Square2> availableMoves = new ArrayList<Square2>();
+		return turn;
+	}
+
+	public ArrayList<Move2> getAvailableMoves() 
+	{
+		return availableMoves;
+	}
+
+	public ArrayList<Move2> findAvailableMoves()
+	{
+		ArrayList<Move2> availableMoves = new ArrayList<Move2>();
 		for (int i = 0; i < board.length; i++) 
 		{
 			for (int j = 0; j < board[i].length; j++) 
 			{
-				Square2 move = new Square2(j,i,turn);
-				if (getCaptureSquares(move).size() > 0)
+				Square2 moveSquare = new Square2(j,i,turn);
+				Move2 move = new Move2(moveSquare);
+				if (move.getCaptureSquares().size() > 0)
 				{
 //					board[i][j] = "x";
 					availableMoves.add(move);
@@ -29,86 +41,81 @@ public class BoardStatus2 extends Board2{
 			}
 			
 		}
-//		printBoard();
-//		clearMoves();
 		this.availableMoves = availableMoves;
 		return availableMoves;
 	}
-	
-//	list of opposite colour buttons that one particular move will capture
-//	possible to add this as an variable to Square and refactor the placing part
-	public ArrayList<Square2> getCaptureSquares(Square2 square)
+	public boolean isAvailableMove(Square2 square)
 	{
-		ArrayList<Square2> captureSquares = new ArrayList<Square2>();
-		if (!board[square.getLocationY()][square.getLocationX()].isEmpty())
+		for (Move2 move : availableMoves)
 		{
-			return captureSquares;
-		}
-//		ArrayList<Square2> squareList;
-		for (int i = -1 ; i <= 1;i++)
-		{
-			for (int j = -1 ; j <= 1;j++)
+			if (move.getMoveSquare().getLocationX() == square.getLocationX() && move.getMoveSquare().getLocationY() == square.getLocationY())
 			{
-				ArrayList<Square2> squareList = getOneDirection(square,i,j);
-				if (isValidDirection(squareList))
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void printBoard ()
+	{
+		System.out.println("0 1 2 3 4 5 6 7");
+		System.out.println("A B C D E F G H");
+		for (int i = 0; i < board.length; i++) 
+		{
+//			System.out.print("  ");
+//			System.out.print((i+1) + "\u2001"); // space in there appears with different width every single time
+			for (int j = 0; j < board[i].length; j++) 
+			{
+				String squarePrint = "";
+				switch(board[j][i].getButton())
 				{
-						for (Square2 captureSquare : squareList)
-						{
-							if (captureSquare.getButton() != square.getButton())
-							{
-								captureSquares.add(captureSquare);
-							}
-						}
+				case WHITE:
+					squarePrint = "○";
+					break;
+				case BLACK:
+					squarePrint = "●";
+					break;
+				case EMPTY:
+					squarePrint = "☐";
+					break;
+//				case ACTIVE:
+//					squarePrint = "☒";
+//					break;
+				}
+				if (isAvailableMove(new Square2(j,i,turn)))
+				{
+					squarePrint = "☒";
+				}
+				System.out.print(squarePrint + "  ");
+			}
+			System.out.print((i+1));
+			System.out.println(" " + i);
+		}
+	}
+	public void placeMove (Square2 square)
+	{
+		super.board[square.getLocationX()][square.getLocationY()].setButton(square.getButton());
+		for (Move2 move : availableMoves)
+		{
+			if (move.getMoveSquare().getLocationX() == square.getLocationX() && move.getMoveSquare().getLocationY() == square.getLocationY())
+			{
+				for (Square2 captureSquare : move.getCaptureSquares())
+				{
+					super.board[captureSquare.getLocationY()][captureSquare.getLocationX()].setButton(square.getButton());
 				}
 			}
 		}
-		return captureSquares;
+//		Switch player
+		turn = (turn == buttonValues.BLACK)? buttonValues.WHITE : buttonValues.BLACK;
+		findAvailableMoves();
+
 	}
 	
-	public ArrayList<Square2> getOneDirection (Square2 square, int xIncrement, int yIncrement)
-	{
-		ArrayList<Square2> squareList = new ArrayList<Square2> ();
-		int tempLocationX = square.getLocationX();
-		int tempLocationY = square.getLocationY();
-		squareList.add(square);
-		if (xIncrement == 0 && yIncrement == 0)
-		{
-			return squareList;
-		}
-		while (tempLocationY <= 7 && tempLocationX <= 7 && tempLocationY >= 0 && tempLocationX >= 0) 
-		{
-			if (!(tempLocationY == square.getLocationY() && tempLocationX == square.getLocationX()))
-			{
-				squareList.add(new Square2(tempLocationX,tempLocationY,board[tempLocationY][tempLocationX].getButton()));
-			}
-			if (board[tempLocationY][tempLocationX].getButton() == square.getButton())
-			{
-				break;
-			}
-			tempLocationX += xIncrement;
-			tempLocationY += yIncrement;
-		}
-		return squareList;
-	}
+
 	
-	public boolean isValidDirection (ArrayList<Square2> squareList)
-	{
-		for (Square2 square : squareList)
-		{
-			if (square.isEmpty() || square.isActive() || squareList.size()<=2)
-			{
-				return false;
-			}
-		}
-		if (squareList.get(0).getButton() == squareList.get(squareList.size()-1).getButton() ) // making sure that the list starts and ends with same button
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+
+	
+
 	
 
 }

@@ -9,13 +9,18 @@ public class Board2 {
 //	Standard board is 8x8.
 //	think about making it private? has impact on subclasses
 	 Square2[][] board;
-	
+
+
 	public Board2 ()
 	{
 		this.board = new Square2[8][8];
 		initializeBoard();
 	}
 	
+	public Square2[][] getBoard() 
+	{
+		return board;
+	}
 	public void initializeBoard ()
 	{
 		for (int i = 0; i < board.length; i++) 
