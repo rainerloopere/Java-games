@@ -76,4 +76,20 @@ public class Board2 {
 		}
 	}
 	
+	public int countButtons (buttonValues referenceButton)
+	{
+		int count = 0;
+		for (int i = 0; i < board.length; i++) 
+		{
+			for (int j = 0; j < board[i].length; j++) 
+			{
+				if (board[j][i].getButton() == referenceButton)
+				{
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+	
 }

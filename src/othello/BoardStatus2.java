@@ -6,7 +6,7 @@ import othello.Square2.buttonValues;
 
 public class BoardStatus2 extends Board2{
 	private buttonValues turn; 
-	private ArrayList<Move2> availableMoves;
+	private static ArrayList<Move2> availableMoves;
 	
 	public BoardStatus2 ()
 	{
@@ -19,7 +19,7 @@ public class BoardStatus2 extends Board2{
 		return turn;
 	}
 
-	public ArrayList<Move2> getAvailableMoves() 
+	public static ArrayList<Move2> getAvailableMoves() 
 	{
 		return availableMoves;
 	}
@@ -27,15 +27,15 @@ public class BoardStatus2 extends Board2{
 	public ArrayList<Move2> findAvailableMoves()
 	{
 		ArrayList<Move2> availableMoves = new ArrayList<Move2>();
-		for (int i = 0; i < board.length; i++) 
+		for (int i = 0; i < super.board.length; i++) 
 		{
-			for (int j = 0; j < board[i].length; j++) 
+			for (int j = 0; j < super.board[i].length; j++) 
 			{
 				Square2 moveSquare = new Square2(j,i,turn);
-				Move2 move = new Move2(moveSquare);
+				Move2 move = new Move2(moveSquare, super.board);
 				if (move.getCaptureSquares().size() > 0)
 				{
-//					board[i][j] = "x";
+//					super.board[i][j] = "x";
 					availableMoves.add(move);
 				}
 			}
@@ -60,14 +60,14 @@ public class BoardStatus2 extends Board2{
 	{
 		System.out.println("0 1 2 3 4 5 6 7");
 		System.out.println("A B C D E F G H");
-		for (int i = 0; i < board.length; i++) 
+		for (int i = 0; i < super.board.length; i++) 
 		{
 //			System.out.print("  ");
 //			System.out.print((i+1) + "\u2001"); // space in there appears with different width every single time
-			for (int j = 0; j < board[i].length; j++) 
+			for (int j = 0; j < super.board[i].length; j++) 
 			{
 				String squarePrint = "";
-				switch(board[j][i].getButton())
+				switch(super.board[i][j].getButton())
 				{
 				case WHITE:
 					squarePrint = "○";
@@ -89,12 +89,16 @@ public class BoardStatus2 extends Board2{
 				System.out.print(squarePrint + "  ");
 			}
 			System.out.print((i+1));
-			System.out.println(" " + i);
+			System.out.println(" " + i); //temp
 		}
+		
+//		System.out.println(availableMoves); //temp
 	}
 	public void placeMove (Square2 square)
 	{
-		super.board[square.getLocationX()][square.getLocationY()].setButton(square.getButton());
+//		System.out.println("placing move " + square); //temp
+//		System.out.println("found square " + super.board[square.getLocationY()][square.getLocationX()]); //temp
+		super.board[square.getLocationY()][square.getLocationX()].setButton(square.getButton());
 		for (Move2 move : availableMoves)
 		{
 			if (move.getMoveSquare().getLocationX() == square.getLocationX() && move.getMoveSquare().getLocationY() == square.getLocationY())
@@ -105,11 +109,15 @@ public class BoardStatus2 extends Board2{
 				}
 			}
 		}
-//		Switch player
+
+		switchPlayer();
+	}
+	public void switchPlayer()
+	{
 		turn = (turn == buttonValues.BLACK)? buttonValues.WHITE : buttonValues.BLACK;
 		findAvailableMoves();
-
 	}
+
 	
 
 	
