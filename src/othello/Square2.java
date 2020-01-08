@@ -60,4 +60,10 @@ public class Square2 {
 	{
 		return "[" + locationX + "," + locationY + "," + button + "]";
 	}
+	public Square2(Square2 that)
+	{
+		this.locationX = that.locationX;
+		this.locationY = that.locationY;
+		this.button = that.button;
+	}
 }

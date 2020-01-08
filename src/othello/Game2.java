@@ -56,10 +56,10 @@ public class Game2 {
 		}
 		return true;
 	}
-	public static buttonValues findWinner(Board2 board)
+	public static buttonValues findWinner(BoardStatus2 boardStatus)
 	{
-		int countWhite = board.countButtons(buttonValues.WHITE);
-		int countBlack = board.countButtons(buttonValues.BLACK);
+		int countWhite = boardStatus.countButtons(buttonValues.WHITE);
+		int countBlack = boardStatus.countButtons(buttonValues.BLACK);
 		
 		System.out.println("Black has " + countBlack + " points.");
 		System.out.println("White has " + countWhite + " points.");
@@ -91,7 +91,6 @@ public class Game2 {
 
 		//		board.getSquareList(3, 2, "b", 0, 0);
 
-		Board2 board = new Board2();
 		Scanner input = new Scanner(System.in);
 		
 		System.out.println("Enter the option to play:");
@@ -114,7 +113,7 @@ public class Game2 {
 				boardStatus.placeMove(askForMove(boardStatus));
 //				counter++;
 			}
-			findWinner(board);
+			findWinner(boardStatus);
 			break;
 		case 2:
 			System.out.println("User starts!");
@@ -131,18 +130,19 @@ public class Game2 {
 				}
 				else
 				{
-					AI2.evaluateRandom();
-					boardStatus.placeMove(AI2.getBestMove());
+					AI2 randomAI = new AI2();
+					randomAI.evaluateRandom(boardStatus);
+					boardStatus.placeMove(randomAI.getBestMove(boardStatus));
 				}
 			}
-			findWinner(board);
+			findWinner(boardStatus);
 
 			break;
 		case 3:
 			int whiteWins = 0;
 			int blackWins = 0;
 
-			for (int i = 0; i < 2; i++) 
+			for (int i = 0; i < 1000; i++) 
 			{
 				boardStatus = new BoardStatus2();
 				
@@ -154,21 +154,28 @@ public class Game2 {
 					
 					if (boardStatus.getTurn() == buttonValues.BLACK)
 					{
-						AI2.evaluateRandom();
-						boardStatus.placeMove(AI2.getBestMove());
+						AI2 randomAI = new AI2();
+						randomAI.evaluateRandom(boardStatus);
+						boardStatus.placeMove(randomAI.getBestMove(boardStatus));
 					}
 					else
 					{
-						AI2.evaluateRandom();
-						boardStatus.placeMove(AI2.getBestMove());
+//						AI2.evaluateRandom();
+//						AI2.evaluateCaptures(boardStatus);
+//						AI2.evaluateLocation(boardStatus);
+//						AI2.evaluateLocation2(boardStatus);
+						
+						AI2 mobilityAI = new AI2();
+						mobilityAI.evaluateMobility(boardStatus);
+						boardStatus.placeMove(mobilityAI.getBestMove(boardStatus));
 					}
 				}
-				buttonValues winner = findWinner(board);
-				if (findWinner(board) == buttonValues.BLACK)
+				buttonValues winner = findWinner(boardStatus);
+				if (winner == buttonValues.BLACK)
 				{
 					blackWins++;
 				} 
-				else if (findWinner(board) == buttonValues.WHITE) 
+				else if (winner == buttonValues.WHITE) 
 				{
 					whiteWins++;
 				}
@@ -177,7 +184,6 @@ public class Game2 {
 			System.out.println("White won " + whiteWins + " times.");
 			break;
 			
-//			counting does not work because it is running on board class. board class is useless and needs to be refactored.
 		default:
 			System.out.println("Something went wrong, try again.");
 		}
