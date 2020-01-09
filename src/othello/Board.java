@@ -198,7 +198,7 @@ public class Board {
 			}
 		}
 	}
-	
+//	12,3
 	public void placeMove (Square move)
 	{
 		System.out.println(move);
