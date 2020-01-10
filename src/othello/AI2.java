@@ -2,6 +2,8 @@ package othello;
 
 import java.util.ArrayList;
 
+import othello.Square2.buttonValues;
+
 
 public class AI2{
 
@@ -43,6 +45,32 @@ public class AI2{
 		}
 		availableMovesEvaluation = evaluatedMoves;
 		return evaluatedMoves;
+	}
+	public int evaluateBoardByLocation (BoardStatus2 boardStatus, buttonValues player)
+	{
+		int score = 0;
+		
+		int[][] values ={
+			{ 99, -8,  8,  6,  6,  8, -8, 99},
+			{ -8,-24, -4, -3, -3, -4,-24, -8},
+			{  8, -4,  7,  4,  4,  7, -4,  8},
+			{  6, -3,  4,  0,  0,  4, -3,  6},
+			{  6, -3,  4,  0,  0,  4, -3,  6},
+			{  8, -4,  7,  4,  4,  7, -4,  8},
+			{ -8,-24, -4, -3, -3, -4,-24, -8},
+			{ 99, -8,  8,  6,  6,  8, -8, 99}};
+		
+		for (int i = 0; i < boardStatus.getBoard().length; i++) 
+		{
+			for (int j = 0; j < boardStatus.getBoard()[i].length; j++) 
+			{
+				if (boardStatus.getBoard()[j][i].getButton() == player)
+				{
+					score += values[j][i];
+				}
+			}
+		}
+		return score;
 	}
 	public ArrayList<Integer> evaluateLocation (BoardStatus2 boardStatus)
 	{
@@ -93,21 +121,61 @@ public class AI2{
 
 		for (Move2 move : boardStatus.getAvailableMoves())
 		{
-//			System.out.println(move.getMoveSquare()); //temp
 			BoardStatus2 tempBoard = new BoardStatus2(boardStatus);
-//			System.out.println("copy of the board"); //temp
-//			tempBoard.printBoard(); //temp
 			tempBoard.placeMove(move.getMoveSquare());
-//			System.out.println("evaluating a potential move:"); //temp
-//			tempBoard.printBoard(); //temp
 		
 			// Multiplied with -1 because getBestMove works to find the highest evaluation. In this case, smallest number of opponents moves is best so evaluation is inverted.
 			evaluatedMoves.add(tempBoard.getAvailableMoves().size() * -1); 
 		}
-//		System.out.println(boardStatus.getAvailableMoves()); //temp
-//		System.out.println(evaluatedMoves); //temp
 		availableMovesEvaluation = evaluatedMoves;
 		return evaluatedMoves;
+	}
+	
+	public Move2 evaluateMiniMaxNode (BoardStatus2 boardStatus, buttonValues player, int depth, boolean maximize)
+	{
+		
+		if (depth == 0 || !(Game2.hasAvailableMoves(boardStatus)))
+		{
+			return new Move2(evaluateBoardByLocation(boardStatus,player));
+		}
+		
+		Move2 bestMove;
+		
+		if (maximize)
+		{
+			bestMove = new Move2(Integer.MIN_VALUE);
+			
+			for (Move2 move : boardStatus.getAvailableMoves())
+			{
+				BoardStatus2 tempBoard = new BoardStatus2(boardStatus);
+				tempBoard.placeMove(move.getMoveSquare());
+				
+				int score = evaluateMiniMaxNode(boardStatus, player, depth-1, false).getEvaluation();
+				if (score > bestMove.getEvaluation()) 
+					{
+					bestMove = new Move2(move.getMoveSquare(),boardStatus.getBoard());
+					bestMove.setEvaluation(score);
+					}
+			}
+		}
+		else
+		{
+			bestMove = new Move2(Integer.MAX_VALUE);
+			
+			for (Move2 move : boardStatus.getAvailableMoves())
+			{
+				BoardStatus2 tempBoard = new BoardStatus2(boardStatus);
+				tempBoard.placeMove(move.getMoveSquare());
+				
+				int score = evaluateMiniMaxNode(boardStatus, player, depth-1, true).getEvaluation();
+				if (score < bestMove.getEvaluation()) 
+				{
+				bestMove = new Move2(move.getMoveSquare(),boardStatus.getBoard());
+				bestMove.setEvaluation(score);
+				}
+			}
+		}
+		return bestMove;
 	}
 	
 }

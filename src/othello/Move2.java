@@ -6,13 +6,18 @@ import othello.Square2.buttonValues;
 
 public class Move2{
 	
-	Square2 moveSquare;
+	private Square2 moveSquare;
 	private ArrayList<Square2> captureSquares;
+	private int evaluation;
 	
 	public Move2(Square2 square, Square2[][] board)
 	{
 		this.moveSquare = square;
 		this.captureSquares = findCaptureSquares(board);
+	}
+	public Move2(int evaluation)
+	{
+		this.evaluation = evaluation;
 	}
 	
 public Square2 getMoveSquare() 
@@ -25,6 +30,12 @@ public Square2 getMoveSquare()
 		return captureSquares;
 	}
 
+	public int getEvaluation() {
+		return evaluation;
+	}
+	public void setEvaluation(int evaluation) {
+		this.evaluation = evaluation;
+	}
 	//	list of opposite colour buttons that one particular move will capture
 	public ArrayList<Square2> findCaptureSquares(Square2[][] board)
 	{

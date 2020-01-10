@@ -171,8 +171,7 @@ public class BoardStatus2{
 		this.turn = boardStatus.getTurn();
 		for (int i = 0; i < boardStatus.getBoard().length; i++) 
 		{
-//			for (int j = 0; j < boardStatus.getBoard()[i].length; j++) 
-			for (int j = 0; j < 8; j++) 
+			for (int j = 0; j < boardStatus.getBoard()[i].length; j++)
 			{
 //				System.out.println(boardStatus.getBoard()[i][j]);
 //				System.out.println(this.board[i][j]);

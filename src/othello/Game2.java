@@ -142,7 +142,7 @@ public class Game2 {
 			int whiteWins = 0;
 			int blackWins = 0;
 
-			for (int i = 0; i < 1000; i++) 
+			for (int i = 0; i < 10; i++) 
 			{
 				boardStatus = new BoardStatus2();
 				
@@ -160,14 +160,19 @@ public class Game2 {
 					}
 					else
 					{
+						AI2 AI = new AI2();
 //						AI2.evaluateRandom();
 //						AI2.evaluateCaptures(boardStatus);
 //						AI2.evaluateLocation(boardStatus);
 //						AI2.evaluateLocation2(boardStatus);
 						
-						AI2 mobilityAI = new AI2();
-						mobilityAI.evaluateMobility(boardStatus);
-						boardStatus.placeMove(mobilityAI.getBestMove(boardStatus));
+//						AI that evaluates moves by minimizing number of opponents available moves
+//						AI2 mobilityAI = new AI2();
+//						mobilityAI.evaluateMobility(boardStatus);
+//						boardStatus.placeMove(mobilityAI.getBestMove(boardStatus));
+						
+//						AI that evaluates the captured locations with a depth of 5
+						boardStatus.placeMove(AI.evaluateMiniMaxNode(boardStatus, boardStatus.getTurn(), 5, true).getMoveSquare());
 					}
 				}
 				buttonValues winner = findWinner(boardStatus);
