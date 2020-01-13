@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import othello.Square.buttonValues;
 
+//test comment
 //Game is the main class to run the game, show messages and interact with the players. 
 public class Game {
 	
